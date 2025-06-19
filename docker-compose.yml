@@ -11,7 +11,7 @@ services:
     volumes:
       - .:/var/www
     networks:
-      - laravel
+      - laravel-net
     depends_on:
       - db-vehicle
     ports:
@@ -38,7 +38,21 @@ services:
     depends_on:
       - app
     networks:
-      - laravel
+      - laravel-net
+  
+  hasura-vehicle:
+    image: hasura/graphql-engine:v2.34.0
+    ports:
+      - "8086:8080"  # GUNAKAN PORT BERBEDA AGAR TIDAK BENTROK
+    restart: always
+    depends_on:
+      - db-vehicle
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:admin123@db-vehicle:5432/motor_wash_vehicle_service
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_ADMIN_SECRET: myadminsecret-vehicle
+    networks:
+      - laravel-net
 
   db-vehicle:
     image: postgres:17
@@ -51,7 +65,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
-      - laravel
+      - laravel-net
     ports:
       - "5435:5432"
     
@@ -59,6 +73,9 @@ services:
 volumes:
   pgdata:
 
+
 networks:
-  laravel:
-    driver: bridge
+  laravel-net:
+    external: true
+
+

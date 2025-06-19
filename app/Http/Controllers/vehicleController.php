@@ -99,7 +99,7 @@ class vehicleController extends Controller
 
             try{
                 // Batasi timeout agar tidak nunggu terlalu lama
-                $response = Http::timeout(2)->get("http://127.0.0.1:8003/api/order/by-vehicle/{$id}");
+                $response = Http::timeout(2)->get("http://nginx-order/api/order/by-vehicle/{$id}");
 
                 if ($response->successful()) {
                     $orders = $response->json('data'); // array order
@@ -137,4 +137,6 @@ class vehicleController extends Controller
             ],500);
         }
     }
+
+    
 }
